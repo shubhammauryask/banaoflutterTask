@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:banaoflutter/model/eventandexperiences.dart';
 import 'package:banaoflutter/model/lessons.dart';
 import 'package:banaoflutter/model/programe.dart';
@@ -6,6 +9,8 @@ import 'package:banaoflutter/widget/eventWidget.dart';
 import 'package:banaoflutter/widget/lessonswidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,20 +20,73 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  List<dynamic> programs = [];
+  List<dynamic> lessons = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+    _fetchDatalessons();
+  }
+
+  Future<void> _fetchData() async {
+    try {
+      var url = Uri.parse('https://632017e19f82827dcf24a655.mockapi.io/api/programs');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(response.body);
+        var items = responseBody['items'];
+        // log(items.toString());
+        items.forEach((item){
+          programs.add(programsdata(Title: item['category'], text1: item['name'], text2: item['lesson'].toString()));
+        });
+        log(programs.toString());
+        setState(() {
+
+        });
+      } else {
+        print('Failed to fetch data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> _fetchDatalessons() async {
+    try {
+      var url = Uri.parse('https://632017e19f82827dcf24a655.mockapi.io/api/lessons');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        var responseBody = json.decode(response.body);
+        var items = responseBody['items'];
+        // log(items.toString());
+        items.forEach((item){
+          lessons.add(lessonsdata(Title:item['category'], text1: item['name'], text2: item['duration'].toString(), lock: item['locked'].toString()));
+        });
+        log(lessons.toString());
+        setState(() {
+
+        });
+      } else {
+        print('Failed to fetch data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   int _currentIndex = 0;
   int Selected =1;
-  var programsList = [
-  programsdata(image:'assets/images/frame.png',Title: 'Lifestyle', text1: 'A complete guide for your new born baby', text2:'16 lessons'),
-  programsdata(image:'assets/images/frame.png',Title: 'Lifestyle', text1: 'A complete guide for your new born baby', text2:'16 lessons'),
-  ];
   var eventList = [
     eventsdata(image:'assets/images/woman.png',Title: 'Babycare', text1: 'Understanding of human behaviour', text2:'13 Feb, Sunday'),
     eventsdata(image:'assets/images/woman.png',Title: 'Babycare', text1: 'Understanding of human behaviour', text2:'13 Feb, Sunday'),
   ];
-  var lessonsList = [
-    lessonsdata(image:'assets/images/woman.png' , Title: 'Babycare', text1: 'Understanding of human behaviour',lock:'assets/images/lock.png', text2: '3 min'),
-    lessonsdata(image:'assets/images/woman.png' , Title: 'Babycare', text1: 'Understanding of human behaviour',lock:'assets/images/lock.png', text2: '3 min'),
-  ];
+  // var lessonsList = [
+  //   lessonsdata(image:'assets/images/woman.png' , Title: 'Babycare', text1: 'Understanding of human behaviour',lock:'assets/images/lock.png', text2: '3 min'),
+  //   lessonsdata(image:'assets/images/woman.png' , Title: 'Babycare', text1: 'Understanding of human behaviour',lock:'assets/images/lock.png', text2: '3 min'),
+  // ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,15 +247,15 @@ class _HomeScreenState extends State<HomeScreen> {
              ),
              alignment: Alignment.topLeft,
            ),
-           SizedBox(height: MediaQuery.of(context).size.height*0.04,),
+           SizedBox(height: MediaQuery.of(context).size.height*0.04,),//programs
            Container(
              height: MediaQuery.of(context).size.height*0.4,
              width: MediaQuery.of(context).size.width,
              child: ListView.builder(
                  scrollDirection: Axis.horizontal,
-                 itemCount: programsList.length,
+                 itemCount: programs.length,
                  itemBuilder:(context , index){
-                   return programsWidget(context,programsList[index]);
+                   return programsWidget(context,programs[index]);
                  }
              ),
            ),
@@ -265,9 +323,9 @@ class _HomeScreenState extends State<HomeScreen> {
              width: MediaQuery.of(context).size.width,
              child: ListView.builder(
                  scrollDirection: Axis.horizontal,
-                 itemCount: lessonsList.length,
+                 itemCount: lessons.length,
                  itemBuilder:(context , index){
-                   return lessonsWidget(context,lessonsList[index]);
+                   return lessonsWidget(context,lessons[index]);
                  }
              ),
            ),

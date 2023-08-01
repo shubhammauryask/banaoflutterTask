@@ -15,7 +15,7 @@ Widget programsWidget(BuildContext context,programsdata data){
           children: [
                ClipRRect(
                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                  child: Image.asset( data.image,fit: BoxFit.cover,
+                  child: Image.asset( 'assets/images/frame.png',fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width*0.6,
                     height:MediaQuery.of(context).size.height*0.23,
                   )
@@ -45,7 +45,7 @@ Widget programsWidget(BuildContext context,programsdata data){
                     SizedBox(height:MediaQuery.of(context).size.height*0.02,),
                     Row(
                       children: [
-                        Text(data.text2,style: TextStyle(fontSize: 12,color: Color(0xff6D747A)),)
+                        Text(data.text2 + ' Lessons',style: TextStyle(fontSize: 12,color: Color(0xff6D747A)),)
                       ],
                     ),
                   ],

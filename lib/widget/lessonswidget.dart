@@ -16,7 +16,7 @@ Widget lessonsWidget(BuildContext context,lessonsdata data){
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                child: Image.asset( data.image,fit: BoxFit.cover,
+                child: Image.asset( 'assets/images/woman.png',fit: BoxFit.cover,
                   width: MediaQuery.of(context).size.width*0.6,
                   height:MediaQuery.of(context).size.height*0.2,
                 )
@@ -48,7 +48,9 @@ Widget lessonsWidget(BuildContext context,lessonsdata data){
                       children: [
                         Text(data.text2,style: TextStyle(fontSize: 12,color: Color(0xff6D747A)),),
                         Spacer(),
-                        Image.asset(data.lock,),
+                        Image.asset(
+                          'assets/images/lock.png',
+                        ),
                       ],
                     ),
                   ],
